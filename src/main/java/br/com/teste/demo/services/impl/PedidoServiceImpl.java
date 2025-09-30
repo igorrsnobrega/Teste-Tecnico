@@ -3,6 +3,7 @@ package br.com.teste.demo.services.impl;
 import br.com.teste.demo.dtos.ItemPedidoDTO;
 import br.com.teste.demo.dtos.PedidoDTO;
 import br.com.teste.demo.enums.StatusPedido;
+import br.com.teste.demo.exceptions.ResourceNotFoundException;
 import br.com.teste.demo.models.ItemPedido;
 import br.com.teste.demo.models.Pedido;
 import br.com.teste.demo.models.Produto;
@@ -144,7 +145,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public void deleteOrder(Long id) {
         if (!pedidoRepository.existsById(id)) {
-            throw new RuntimeException("Pedido não encontrado com id: " + id);
+            throw new ResourceNotFoundException("Pedido não encontrado com id: " + id);
         }
         pedidoRepository.deleteById(id);
     }

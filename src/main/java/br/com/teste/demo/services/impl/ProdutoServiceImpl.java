@@ -2,6 +2,7 @@ package br.com.teste.demo.services.impl;
 
 import br.com.teste.demo.dtos.ProdutoDTO;
 import br.com.teste.demo.enums.StatusProduto;
+import br.com.teste.demo.exceptions.ResourceNotFoundException;
 import br.com.teste.demo.models.Produto;
 import br.com.teste.demo.repositories.ProdutoRepository;
 import br.com.teste.demo.services.ProdutoService;
@@ -32,7 +33,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     public ProdutoDTO getProductById(Long id) {
         Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com id: " + id));
         return ProdutoDTO.fromEntity(produto);
     }
 
@@ -56,7 +57,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional
     public ProdutoDTO updateProduct(Long id, ProdutoDTO produtoDTO) {
         Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com id: " + id));
 
         produto.setTitulo(produtoDTO.getTitulo());
         produto.setDescricao(produtoDTO.getDescricao());
@@ -73,7 +74,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional
     public void deleteProduct(Long id) {
         if (!produtoRepository.existsById(id)) {
-            throw new RuntimeException("Produto não encontrado com id: " + id);
+            throw new ResourceNotFoundException("Produto não encontrado com id: " + id);
         }
         produtoRepository.deleteById(id);
     }

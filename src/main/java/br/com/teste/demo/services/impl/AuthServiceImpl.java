@@ -3,6 +3,7 @@ package br.com.teste.demo.services.impl;
 import br.com.teste.demo.dtos.LoginRequest;
 import br.com.teste.demo.dtos.LoginResponse;
 import br.com.teste.demo.dtos.RegisterRequest;
+import br.com.teste.demo.exceptions.BusinessException;
 import br.com.teste.demo.models.User;
 import br.com.teste.demo.repositories.UserRepository;
 import br.com.teste.demo.security.JwtTokenProvider;
@@ -57,11 +58,11 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public String registerUser(RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new RuntimeException("Erro: Username já está em uso!");
+            throw new BusinessException("Erro: Username já está em uso!");
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new RuntimeException("Erro: Email já está em uso!");
+            throw new BusinessException("Erro: Email já está em uso!");
         }
 
         User user = new User();

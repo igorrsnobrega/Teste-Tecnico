@@ -4,6 +4,8 @@ import br.com.teste.demo.dtos.PagamentoDTO;
 import br.com.teste.demo.enums.FormaPagamento;
 import br.com.teste.demo.enums.StatusPagamento;
 import br.com.teste.demo.enums.StatusPedido;
+import br.com.teste.demo.exceptions.BusinessException;
+import br.com.teste.demo.exceptions.ResourceNotFoundException;
 import br.com.teste.demo.models.Pagamento;
 import br.com.teste.demo.models.Pedido;
 import br.com.teste.demo.repositories.PagamentoRepository;
@@ -59,7 +61,7 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Override
     public PagamentoDTO getPagamentoById(Long id) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado com id: " + id));
         return PagamentoDTO.fromEntity(pagamento);
     }
 
@@ -74,7 +76,7 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Transactional
     public PagamentoDTO updateStatusPagamento(Long id, StatusPagamento novoStatus) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado com id: " + id));
 
         pagamento.setStatusPagamento(novoStatus);
         pagamento.setDataAtualizacao(LocalDateTime.now());
@@ -96,10 +98,10 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Transactional
     public PagamentoDTO processarPagamento(Long id) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado com id: " + id));
 
         if (pagamento.getStatusPagamento() != StatusPagamento.PENDENTE) {
-            throw new RuntimeException("Apenas pagamentos pendentes podem ser processados");
+            throw new BusinessException("Apenas pagamentos pendentes podem ser processados");
         }
 
         // Simula processamento do pagamento
@@ -126,10 +128,10 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Transactional
     public PagamentoDTO cancelarPagamento(Long id) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado com id: " + id));
 
         if (pagamento.getStatusPagamento() == StatusPagamento.APROVADO) {
-            throw new RuntimeException("Pagamentos aprovados não podem ser cancelados. Use estorno.");
+            throw new BusinessException("Pagamentos aprovados não podem ser cancelados. Use estorno.");
         }
 
         pagamento.setStatusPagamento(StatusPagamento.CANCELADO);
@@ -143,10 +145,10 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Transactional
     public PagamentoDTO estornarPagamento(Long id) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado com id: " + id));
 
         if (pagamento.getStatusPagamento() != StatusPagamento.APROVADO) {
-            throw new RuntimeException("Apenas pagamentos aprovados podem ser estornados");
+            throw new BusinessException("Apenas pagamentos aprovados podem ser estornados");
         }
 
         pagamento.setStatusPagamento(StatusPagamento.ESTORNADO);
