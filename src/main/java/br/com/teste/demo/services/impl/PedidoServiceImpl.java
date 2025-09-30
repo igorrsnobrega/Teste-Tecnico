@@ -165,7 +165,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoDTO> findByValorRange(BigDecimal valorMinimo, BigDecimal valorMaximo) {
-        return pedidoRepository.findByValorBetween(valorMinimo, valorMaximo).stream()
+        return pedidoRepository.findByValorTotalBetween(valorMinimo, valorMaximo).stream()
                 .map(PedidoDTO::fromEntity)
                 .collect(Collectors.toList());
     }

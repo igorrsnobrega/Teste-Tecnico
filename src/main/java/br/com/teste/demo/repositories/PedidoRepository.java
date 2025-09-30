@@ -20,11 +20,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     List<Pedido> findByDataCadastroBetween(LocalDateTime dataInicio, LocalDateTime dataFim);
 
-    List<Pedido> findByValorGreaterThanEqual(BigDecimal valor);
+    List<Pedido> findByValorTotalGreaterThanEqual(BigDecimal valor);
 
-    List<Pedido> findByValorLessThanEqual(BigDecimal valor);
+    List<Pedido> findByValorTotalLessThanEqual(BigDecimal valor);
 
-    List<Pedido> findByValorBetween(BigDecimal valorMinimo, BigDecimal valorMaximo);
+    List<Pedido> findByValorTotalBetween(BigDecimal valorMinimo, BigDecimal valorMaximo);
 
     @Query("SELECT p FROM Pedido p WHERE " +
            "(:status IS NULL OR p.statusPedido = :status) AND " +
