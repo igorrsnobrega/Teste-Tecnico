@@ -60,15 +60,15 @@ mvn spring-boot:run
 ## Acessos
 
 - **Aplicação:** http://localhost:8080
-- **Swagger UI:** http://localhost:8080/swagger-ui/
-- **API Docs:** http://localhost:8080/v2/api-docs
+- **Swagger UI:** http://localhost:8080/swagger-ui/index.html
+- **API Docs (OpenAPI):** http://localhost:8080/v3/api-docs
 
 ## Documentação da API
 
 A documentação completa da API está disponível através do Swagger UI. Para acessar:
 
 1. Inicie a aplicação
-2. Acesse http://localhost:8080/swagger-ui/
+2. Acesse http://localhost:8080/swagger-ui/index.html
 3. Para endpoints protegidos, clique em "Authorize" e insira o token JWT no formato: `Bearer {seu-token}`
 
 ## Estrutura do Projeto
